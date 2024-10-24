@@ -1,0 +1,39 @@
+import React, {useContext} from 'react';
+import { ShopContext } from "../../context/shop-context";
+
+
+export const Product = (props) => {
+
+    const {_id, productName, priceTag, productImage, quantity} = props.data   //changed id
+    const productId = _id.$oid; // Use _id.$oid to get the string ID
+
+    const{ addToCart, cartItems } = useContext(ShopContext);
+    // const cartItemAmmount = cartItems[id];
+    const cartItemAmount = (cartItems[productId] || 0); // Default to 0 if the item isn't in the cart yet
+    
+
+
+    return( 
+        <div className="product"> 
+            <img src={productImage}/>
+            <div className="description">
+                <p>
+                    <b>{productName}</b>
+                </p>
+                <p>
+                    {priceTag} €
+                </p>
+            </div>
+            {/* Disable the button if quantity is 0 */}
+            <button
+                className="addToCartBttn"
+                onClick={() => quantity > 0 && addToCart(productId)}
+                disabled={quantity === 0}
+            >
+                {quantity > 0 ? `Add To Cart ${cartItemAmount > 0 ? `(${cartItemAmount})` : ''}` : 'Out of stock'}
+            </button>
+        </div>
+    );
+};
+
+

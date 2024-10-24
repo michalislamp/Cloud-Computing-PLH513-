@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "productName": "Tzatziki",
+        "priceTag": 3.5,
+        "productImage": "https://i.ibb.co/cCcFxtb/1.png"
+    },
+      {
+        "id": 2,
+        "productName": "Souvlaki",
+        "priceTag": 2.5,
+        "productImage": "https://i.ibb.co/SXS50tH/2.png"
+      },
+      {
+        "id": 3,
+        "productName": "Xoriatiki",
+        "priceTag": 6,
+        "productImage": "https://i.ibb.co/p3tPGG8/3.png"
+      }
+    ]
