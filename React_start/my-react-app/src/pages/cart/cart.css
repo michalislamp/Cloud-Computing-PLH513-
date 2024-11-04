@@ -26,9 +26,14 @@
   }
   
   .countHandler input {
+    border: none;
+    background-color: #1a1a1a;
+    color: rgb(255, 255, 255);
     width: 40px;
+    height: 25px;
     text-align: center;
     font-weight: bolder;
+    border-radius: 15px; /* Fully rounded edges */
   }
   .checkout {
   display: flex;
@@ -48,9 +53,16 @@
   }
 
   .countHandler button {
+    color: white;
     width: 30px; /* Adjust the width as needed */
     height: 30px; /* Adjust the height as needed */
     font-size: 14px; /* Adjust the font size as needed */
     padding: 5px; /* Adjust the padding as needed */
     margin: 2px; /* Adjust the margin as needed */
   }
+
+  .error {
+    font-size: 12px; /* Smaller font size */
+    color: #f44336; /* Optional: color for the error text */
+    margin-top: 5px; 
+}

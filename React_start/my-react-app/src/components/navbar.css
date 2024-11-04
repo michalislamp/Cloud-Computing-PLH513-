@@ -23,3 +23,19 @@
     margin-left: 20px;
     font-size: 25px;
   }
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo {
+  height: 40px; /* Adjust as needed */
+  margin-right: 800px; /* Space between logo and "e-Taverna" text */
+}
+
+/* Hover effect to change color */
+.links a:hover {
+  color: #bf00ff; /* Change this to your desired hover color */
+}

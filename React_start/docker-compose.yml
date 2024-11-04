@@ -1,0 +1,79 @@
+# docker compose down ; docker image prune -f ; docker compose up --build
+
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb
+    networks:
+      - pro_backend_network
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  ordersdb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: ordersdb
+    networks:
+      - pro_backend_network
+    restart: always
+    ports:
+      - "27018:27017"  # This binds ordersdb’s internal port 27017 to host’s port 27018
+    volumes:
+      - ordersdb_data:/data/db
+
+  flask-api:
+    build:
+      context: ./flask-api
+    container_name: flask-api
+    environment:
+      FLASK_ENV: development
+      MONGO_URI_MAIN: "mongodb://mongodb:27017/your_main_db"
+      MONGO_URI_ORDERS: "mongodb://ordersdb:27017/your_orders_db"
+    depends_on:
+      - mongodb
+      - ordersdb
+    networks:
+      - pro_backend_network
+    restart: always
+    ports:
+      - "8080:8080"
+
+  order-service:
+    build:
+      context: ./OrderService
+    container_name: order-service_c
+    environment:
+      FLASK_ENV: development
+      MONGO_URI_ORDERS: "mongodb://ordersdb:27017/your_orders_db"
+    depends_on:
+      - ordersdb
+    networks:
+      - pro_backend_network
+    restart: always
+    ports:
+      - "8081:8081"
+
+  frontend:
+    build:
+      context: ./my-react-app
+    container_name: frontend_c
+    environment:
+      REACT_APP_API_URL_MAIN: http://localhost:8080
+      REACT_APP_API_URL_ORDER: http://localhost:8081
+    ports:
+      - "5173:5173"
+    networks:
+      - pro_backend_network
+    restart: always
+
+networks:
+  pro_backend_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  ordersdb_data:

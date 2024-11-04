@@ -4,7 +4,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from bson.json_util import dumps, ObjectId
 
-# docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:latest //Command for MongoDB creation
+# docker run --name ordersdb -p 27018:27017 -d mongodb/mongodb-community-server:latest //Command for MongoDB creation
 # python -m venv .venv // create py virtual environment
 # .venv\Scripts\activate // activate virtual environment
 # py app\orderAPI.py // run the app 
@@ -15,9 +15,10 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # MongoDB connection setup
-client = MongoClient("mongodb://localhost:27018/")  # Update the URI if necessary
-db = client['myDatabase']  # Use your database name
-products_collection = db['products']  # Use your collection name
+#client = MongoClient("mongodb://ordersdb:27017/")  # FOR DOCKER
+client = MongoClient("mongodb://localhost:27018/")  # FOR LOCAL
+db = client['myDatabase'] 
+products_collection = db['products']  
 
 
 @app.route("/")
@@ -25,7 +26,7 @@ def index():
     try:
         host_name = socket.gethostname()
         host_ip = socket.gethostbyname(host_name)
-        return "Hello, World!", 200
+        return "Hello, World,re foti!", 200
     except Exception:
         return render_template('error.html')
 

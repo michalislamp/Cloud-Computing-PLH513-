@@ -1,17 +1,60 @@
-.shopTitle {
-    margin-top: 100px;
-    text-align: center;
+  
+
+  .header {
+    /* display: flex; */
+    /* align-items: center;  */
+    /* justify-content: space-between; Space between title and search bar */
+    margin-top: 90px; /* Maintain margin for top spacing */
+  } 
+
+  .shopTitle {  
+    margin-top: 40px;
+    /* text-align: center; */
     font-size: 15px;
+    margin-left: 670px;
+  }
+
+  .search-bar {
+    /* display: flex;
+    /* margin-top: -50px; */
+   /* justify-content: flex-end; Center the search bar */
+    margin-top: -73px;
+    /* align-items: right; */
+    margin-left: 1100px; 
+  }
+
+  .search-bar input {
+    width: 350px;
+    /* max-width: 600px; Limit the width on larger screens */
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 25px; /* Rounded corners */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    outline: none;
+    transition: box-shadow 0.3s ease;
+    background-color: #242424;
+  }
+
+  .search-bar input::placeholder {
+    color: #888; /* Lighter placeholder text */
+  }
+
+  .search-bar input:focus {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Slightly larger shadow on focus */
+    border-color: #bf00ff; /* Green border on focus */
   }
   .products {
+    margin-top: 50px;
     width: 100%;
     height: auto;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     place-items: center;
   }
-  
-  .product {
+
+
+  /* .product {
     border-radius: 15px;
     width: 300px;
     height: 350px;
@@ -38,6 +81,7 @@
   .addToCartBttn {
     background-color: rgb(19, 19, 19);
     border: 2px solid rgb(19, 19, 19);
+    color: #ffffff;
     min-width: 100px;
     padding-left: 10px;
     padding-right: 10px;
@@ -50,6 +94,66 @@
     background-color: rgb(19, 19, 19);
     color: white;
     cursor: pointer;
-  }
+  } */
 
-  
+  .product {
+    border-radius: 15px;
+    width: 250px;
+    height: 400px; /* Allow height to adjust based on content */
+    margin: 20px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(153, 153, 153); /* White background for each product box */
+    border: 1px solid #ddd; /* Light gray border */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Add padding inside the product box */
+    transition: transform 0.3s ease; /* Smooth transform on hover */
+}
+/* Image styling within the product */
+.product img {
+  width: 150px; /* Fixed width */
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Crop the image to fit the container */
+  border-radius: 10px; /* Optional: round the corners of the image */
+  margin-bottom: 15px; /* Space below the image */
+}
+.product:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    cursor: pointer;
+}
+
+.product img {
+    width: 100%; /* Make image responsive within product box */
+    max-width: 250px; /* Limit max width to fit nicely */
+    border-radius: 10px; /* Optional: Rounded corners for image */
+    margin-bottom: 15px; /* Space between image and description */
+}
+
+.product .description {
+    text-align: center;
+    font-size: 16px;
+    color: #333; /* Darker text color */
+    margin-top: 10px;
+    margin-bottom: 15px; /* Space between description and button */
+}
+
+/* Button styling inside the product box */
+.addToCartBttn {
+    background-color: rgb(19, 19, 19);
+    border: 2px solid rgb(19, 19, 19);
+    color: #ffffff;
+    padding: 8px 15px; /* Adjusted padding */
+    border-radius: 15px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.addToCartBttn:hover {
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+}
+
+ 

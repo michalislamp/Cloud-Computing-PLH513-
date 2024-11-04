@@ -24,16 +24,7 @@ export const ShopContextProvider = (props) => {
         return savedCart ? JSON.parse(savedCart) : null;
     };
 
-    const [cartItems, setCartItems] = useState(() => loadCartFromCookies() || getDefaultCart());
-
-    useEffect(() => {
-        const savedCart = loadCartFromCookies();
-        if (savedCart) {
-            setCartItems(savedCart); // Load cart from cookies on page load
-        }
-    }, []);
-/////
-
+  
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -46,15 +37,28 @@ export const ShopContextProvider = (props) => {
             });
     }, []);
 
+    const [cartItems, setCartItems] = useState(() => loadCartFromCookies() || getDefaultCart());
+    const [totalPrice, setTotalPrice] = useState(0);
+
+    useEffect(() => {
+        const savedCart = loadCartFromCookies();
+        if (savedCart) {
+            setCartItems(savedCart); // Load cart from cookies on page load
+        }
+    }, []);
+/////
 
     const getTotalCartAmount = () => {
+
+        getReq();  //get the products.
+
+        console.log("products: ", products);
         let totalAmount = 0;
         for(const item in cartItems){
             if (cartItems[item] > 0) {
                 // let itemInfo = products.find((product) => product.id == Number(item));
                 let itemInfo = products.find((product) => product._id.$oid === item);
                 // totalAmount += cartItems[item] * itemInfo.priceTag;
-                // console.log(itemInfo);
                 if (itemInfo) {
                     totalAmount += cartItems[item] * itemInfo.priceTag;
                 } else {
@@ -63,7 +67,8 @@ export const ShopContextProvider = (props) => {
               }
             
         }
-
+        
+        setTotalPrice(totalAmount);
         return totalAmount;
     }
 
@@ -71,13 +76,14 @@ export const ShopContextProvider = (props) => {
     //     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
     // }
     const addToCart = (itemId) => {
+        
         setCartItems((prev) => {
             const updatedCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
             saveCartToCookies(updatedCart);
             return updatedCart;
         });
-    };
 
+    };
 
     const removeFromCart = (itemId) => {
         setCartItems((prev) => {
@@ -95,7 +101,21 @@ export const ShopContextProvider = (props) => {
         });
     };
 
-    const contextValue = {cartItems, addToCart, removeFromCart, updateCartItemCount, getTotalCartAmount, setCartItems};
+    const getReq = () => {
+
+        useEffect(() => {
+            axios.get('http://localhost:8080/products')
+                .then(response => {
+                    setProducts(response.data);
+                })
+                .catch(error => {
+                    console.error('There was an error fetching the products!', error);
+                });
+        }, []);
+
+    };
+
+    const contextValue = {cartItems, addToCart, removeFromCart, updateCartItemCount, getTotalCartAmount, setCartItems, getReq,totalPrice};
 
     return <ShopContext.Provider value={contextValue}>{props.children}</ShopContext.Provider>;
 };

@@ -1,0 +1,58 @@
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  margin-left: 480px;
+  
+  padding: 20px;
+}
+
+.welcome-content {
+  margin-bottom: 30px;
+}
+
+.welcome-content h1 {
+  font-size: 2.5rem;
+  color: #ffffff;
+}
+
+.welcome-content p {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin: 10px 0 20px;
+}
+
+.shop-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.shop-button:hover {
+  background-color: #555;
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.footer-link {
+  color: #666;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}

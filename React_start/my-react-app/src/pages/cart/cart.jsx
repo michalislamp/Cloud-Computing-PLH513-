@@ -1,9 +1,11 @@
 import React, {useContext, useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShopContext } from "../../context/shop-context";
 import {CartItem} from './cart-item';
 import "./cart.css";
 import axios from 'axios';
 import { eraseCookie } from "../../context/cookieHelpers";
+
 
 
 
@@ -15,52 +17,36 @@ export const Cart = () => {
 
     const [products, setProducts] = useState([]);
     const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(false);
-    
 
-    // const handleCheckout = () => {
+    const { totalPrice } = useContext(ShopContext);  //new
 
-    //     try {
-    //         for (const itemId in cartItems) {
-    //             if (cartItems[itemId] > 0) {
-    //                 // Find the product details based on itemId
-    //                 const product = products.find(p => p._id.$oid === itemId);
-                    
-    //                 if (product) {
-    //                     // Calculate new quantity
-    //                     const updatedQuantity = product.quantity - cartItems[itemId];
-                        
-    //                     if (updatedQuantity >= 0) {
-    //                         // Send the update request to your backend
-    //                         axios.put(`http://localhost:8080/products/${product._id.$oid}`, {
-    //                             quantity: updatedQuantity,
-    //                         });
-    //                     } else {
-    //                         console.warn(`Insufficient stock for ${product.productName}`);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         console.log('Checkout successful');
-    //         // Optionally: clear the cart or redirect the user
-    //     } catch (error) {
-    //         console.error('Error during checkout:', error);
-    //     }
-    //     // Clear the cart
-    //     setCartItems({});  // Reset the cart to an empty object
-
-    //     // Delete the cookie
-    //     eraseCookie('cartItems');
-
-    //     // Optionally, redirect the user to a confirmation page or another action
-    //     // alert('Checkout complete! Your cart has been cleared.');
-    // };
+    const navigate = useNavigate(); // Initialize navigate
 
     const handleCheckout = async () => {
         const checkoutPromises = [];
         const failedItems = [];
         const orderProducts = [];  // To store product details for the order
-        const totalAmount = getTotalCartAmount();  // Total price of the order
-    
+        const totalAmount = totalPrice;  // Total price of the order
+
+        
+        // for (const itemId in cartItems){
+            
+            
+        //     // if((cartItems[itemId]===0)){
+        //     //     console.log("cartItems[itemId]===0");
+        //     //     alert("Could not checkout.");
+        //     //     return;
+        //     // }
+        //     // if(isCheckoutDisabled){
+        //     //     alert("Could not checkout.");
+        //     //     return;
+        //     // }
+        // }
+        if(isCheckoutDisabled){
+                alert("Could not checkout.");
+                return;
+            }
+
         try {
             // Create a lookup for product data to avoid `find` in each iteration
             const productLookup = products.reduce((acc, product) => {
@@ -151,13 +137,17 @@ export const Cart = () => {
     }, []);
 
     useEffect(() => {
+        console.log(isCheckoutDisabled);
+        // Check if cartItems is empty (no products added to the cart)
+        const isCartEmpty = Object.keys(cartItems).length === 0;
+        
         const disableCheckout = products.some((product) => {
             const productId = product._id.$oid;
             const cartQuantity = cartItems[productId] || 0;
             return cartQuantity > product.quantity; // If cart quantity exceeds stock quantity
         });
 
-        setIsCheckoutDisabled(disableCheckout);  // Disable checkout if any item is invalid
+        setIsCheckoutDisabled(disableCheckout || isCartEmpty);  // Disable checkout if any item is invalid
     }, [cartItems, products]);  // Re-run the check when cartItems or products change
 
 
@@ -171,16 +161,19 @@ export const Cart = () => {
             .filter((product) => cartItems[product._id.$oid] > 0) // Filter out products with a quantity of 0
             .map((product) => {
                 const productId = product._id.$oid;
+                // console.log(cartItems[productId]);
                 return <CartItem key={productId} data={product} />;
+                
             })}
         </div>
 
         <div className="checkout">
             <p> Total: {totalAmount}€ </p>
-            <button> Continue Shopping </button>
-            <button onClick={() => handleCheckout()} disabled={isCheckoutDisabled}> Checkout </button>
-            {isCheckoutDisabled && <p className="erroCheckout">Could Not Checkout</p>} {/* Error message */}
+            <button onClick={() =>  {console.log("Navigating to /products"); navigate('/products');}}>Continue Shopping</button>
+            <button onClick={() => handleCheckout()} > Checkout </button>
+            {/* {isCheckoutDisabled && <p className="erroCheckout">Could Not Checkout</p>}   */}
         </div>
+        
     </div>
     );
 };

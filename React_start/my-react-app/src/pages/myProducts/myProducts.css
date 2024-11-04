@@ -1,35 +1,182 @@
-.myProductsTitle {
-    margin-top: 100px;
-    text-align: left;
-    font-size: 15px;
+
+/* Admin page styling */
+
+/* Add new product styling */
+.adminTitle {
+  margin-top: 100px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
-.productForm {
-    display: grid;
-    grid-template-columns: 150px 1fr; /* Adjust the width of the label and input columns */
-    gap: 10px; /* Adjust the gap between the label and input fields */
-    align-items: center; /* Align items vertically */
-  }
-  
-  .productForm label {
-    text-align: right; /* Align labels to the right */
-  }
-  
-  .productInput {
-    width: 100%; /* Make input fields take up the remaining space */
-    padding: 10px; /* Add padding to make the input fields larger */
-    font-size: 16px; /* Increase font size */
-    box-sizing: border-box; /* Ensure padding is included in the width */
-  }
+.myProductsTitle {
+  margin-top: 50px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+}
 
-  .buttonContainer {
-    grid-column: span 2; /* Make the button container span both columns */
-    text-align: left; /* Center the button horizontally */
-    margin-top: 20px; /* Add margin to move the button further down */
-  }
+/* .productForm {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 15px;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.productForm label {
+  text-align: right;
+  font-size: 16px;
+  color: #555;
+} */
+
+.productForm {
+  display: grid;
+  grid-template-columns: 200px 100px;
+  column-gap: 15px;
+  align-items: center;
+  /* max-width: 500px; */
+  margin: 0 auto;  
+}
+
+.productForm label {
+  text-align: right;
+  font-size: 16px;
+  color: #ffffff;
+  margin: 0;
+}
   
-  .addProductBttn {
-    padding: 10px 20px; /* Add padding to the button */
-    font-size: 16px; /* Increase font size */
-    cursor: pointer; /* Change cursor to pointer on hover */
-  }
+.productForm input[type="text"],
+.productForm input[type="number"],
+.productForm select {
+  width: 500px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  border: 1px solid rgb(19, 19, 19);
+  border-radius: 20px; /* Add rounding for the input fields */
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+  text-align: center;
+}
+
+.productForm input:focus,
+.productForm select:focus {
+  border-color: #000000; /* Green border on focus */
+  outline: none; /* Removes default outline */
+}
+
+
+.addButtonContainer {
+  grid-column: span 2;  
+  text-align: center;
+  margin-top: 20px;
+  /* margin-left: 100px; */
+}
+
+.addProductBttn {
+  padding: 10px 25px;
+  font-size: 16px;
+  color: #fff;
+  background-color: rgb(19, 19, 19);
+  border: 2px solid rgb(19, 19, 19);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+}
+
+.addProductBttn:hover {
+  background-color: rgb(19, 19, 19);
+  color: white;
+  cursor: pointer;
+}
+
+
+/* Product list styling */
+
+.myProductsTitle {
+  margin-top: 50px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.productList {
+  display: grid;
+  /* flex-wrap: wrap; */
+  grid-template-columns: repeat(5, 1fr); /* Flexible columns */
+  gap: 30px;
+  justify-content: center; /* Center items horizontally */
+  padding: 20px;
+}
+
+.productItem {
+  margin-top: 10px;
+  /* margin-left: -200px;  */
+  /* flex: 250px; Set the base width, allowing them to wrap */
+  max-width: 250px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.productItem:hover {
+  background-color: #f9f9f9;
+}
+
+/* .productItem img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+} */
+.productItem img {
+  width: 100%;
+  height: 250px; /* Set a fixed height for images */
+  object-fit: cover; /* Ensures the image fits within the fixed height */
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+
+.productItem p {
+  font-size: 15px;
+  color: #333;
+}
+
+.productItem input {
+  width: 100%;
+  padding: 5px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.deleteBttn {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #f44336;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.deleteBttn:hover {
+  color: #d32f2f;
+}
