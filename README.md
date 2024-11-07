@@ -2,7 +2,7 @@
 
 This project contains a React front-end and two back-end APIs built using Flask. Follow the steps below to get everything up and running.
 
-## Prerequisites
+## Requirements
 
 Ensure you have the following installed on your system:
 
