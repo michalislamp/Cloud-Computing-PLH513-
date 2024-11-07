@@ -1,4 +1,4 @@
-# React and Flask APIs Project
+# Commercial e-Shop
 
 This project contains a React front-end and two back-end APIs built using Flask. Follow the steps below to get everything up and running.
 
