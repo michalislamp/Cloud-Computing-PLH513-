@@ -9,7 +9,7 @@ Ensure you have the following installed on your system:
 - [Node.js](https://nodejs.org/) (for running the React app)
 - [Python](https://www.python.org/) (for running the Flask APIs)
 - [Virtualenv](https://pypi.org/project/virtualenv/) (for managing Python environments)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for hosting Docker Containers locally)
 
 ## Project Setup (Docker Containers)
 
