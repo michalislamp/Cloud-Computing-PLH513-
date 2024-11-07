@@ -9,8 +9,21 @@ Ensure you have the following installed on your system:
 - [Node.js](https://nodejs.org/) (for running the React app)
 - [Python](https://www.python.org/) (for running the Flask APIs)
 - [Virtualenv](https://pypi.org/project/virtualenv/) (for managing Python environments)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
 
-## Project Setup
+## Project Setup (Docker Containers)
+
+1. Navigate to the React project directory:
+    ```bash
+    cd React_start/
+    ```
+2. Build Docker:
+    ```bash
+    docker compose up
+    ```
+The app will run in `http://localhost:5173/`
+
+## Project Setup (Locally)
 
 ### 1. Running the React App
 
