@@ -8,8 +8,8 @@ from werkzeug.utils import secure_filename
 # NA KANO PERISSOTEROUS LEEGXOUS STO BACK KAI NA KSERO
 # px na do pos ginetai na min parageilo ena proion to opooio einai out of stock
 # mporoun ta api na epikoinonoun metaksi tous px sto post tou arters na kano ena get sto db tou products kai na do an to proion einai out of stock 
-# 
 
+# genikotero check sta API
 
 import os
 
