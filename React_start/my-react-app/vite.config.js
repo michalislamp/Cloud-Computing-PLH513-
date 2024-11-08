@@ -7,5 +7,8 @@ export default defineConfig({
   server: {
     host: '0.0.0.0', // Allows access from outside the container
     port: 5173      // Ensures the port is set to 5173 as expected
+  },
+  build: {
+    sourcemap: false, // Disables source maps to prevent related errors
   }
 })

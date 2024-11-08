@@ -58,6 +58,7 @@
   font-size: 16px;
   color: #333;
   border: 1px solid rgb(19, 19, 19);
+  outline: 1px solid black;
   border-radius: 20px; /* Add rounding for the input fields */
   background-color: #fff;
   transition: border-color 0.3s ease;

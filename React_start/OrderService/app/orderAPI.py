@@ -15,8 +15,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # MongoDB connection setup
-#client = MongoClient("mongodb://ordersdb:27017/")  # FOR DOCKER
-client = MongoClient("mongodb://localhost:27018/")  # FOR LOCAL
+client = MongoClient("mongodb://ordersdb:27017/")  # FOR DOCKER
+# client = MongoClient("mongodb://localhost:27018/")  # FOR LOCAL
 db = client['myDatabase'] 
 products_collection = db['products']  
 

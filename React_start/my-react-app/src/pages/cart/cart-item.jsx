@@ -4,7 +4,7 @@ import "./cart.css";
 
 export const CartItem = (props) => {
 
-    const {_id, productName, priceTag, productImage, quantity} = props.data
+    const {_id, productName, priceTag, imageFile, quantity} = props.data
     const productId = _id.$oid; // Use _id.$oid to get the string ID
 
     const{ cartItems, addToCart, removeFromCart,updateCartItemCount } = useContext(ShopContext);
@@ -50,7 +50,7 @@ export const CartItem = (props) => {
 
     return (
         <div className="cartItem">
-            <img src={productImage}/>
+            <img src={imageFile}/>
             <div className="description">
                 <p>
                     <b>{productName}</b>

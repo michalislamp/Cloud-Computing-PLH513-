@@ -30,17 +30,12 @@ export const Cart = () => {
 
         
         // for (const itemId in cartItems){
-            
-            
-        //     // if((cartItems[itemId]===0)){
-        //     //     console.log("cartItems[itemId]===0");
-        //     //     alert("Could not checkout.");
-        //     //     return;
-        //     // }
-        //     // if(isCheckoutDisabled){
-        //     //     alert("Could not checkout.");
-        //     //     return;
-        //     // }
+        
+        //     if((cartItems[itemId]===0)){
+        //         console.log("cartItems[itemId]===0");
+        //         alert("Could not checkout.");
+        //         return;
+        //     }
         // }
         if(isCheckoutDisabled){
                 alert("Could not checkout.");

@@ -4,7 +4,7 @@ import { ShopContext } from "../../context/shop-context";
 
 export const Product = (props) => {
 
-    const {_id, productName, priceTag, productImage, quantity} = props.data   //changed id
+    const {_id, productName, priceTag, imageFile, quantity} = props.data   //changed id
     const productId = _id.$oid; // Use _id.$oid to get the string ID
 
     const{ addToCart, cartItems } = useContext(ShopContext);
@@ -15,7 +15,7 @@ export const Product = (props) => {
 
     return( 
         <div className="product"> 
-            <img src={productImage}/>
+            <img src={imageFile}/>
             <div className="description">
                 <p>
                     <b>{productName}</b>

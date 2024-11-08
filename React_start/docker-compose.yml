@@ -32,7 +32,7 @@ services:
     environment:
       FLASK_ENV: development
       MONGO_URI_MAIN: "mongodb://mongodb:27017/your_main_db"
-      MONGO_URI_ORDERS: "mongodb://ordersdb:27017/your_orders_db"
+      # MONGO_URI_ORDERS: "mongodb://ordersdb:27017/your_orders_db"
     depends_on:
       - mongodb
       - ordersdb
@@ -41,6 +41,8 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    volumes:
+      - ./uploads:/static/uploads  # Mount uploads folder to store images
 
   order-service:
     build:
