@@ -7,6 +7,8 @@ import {Cart} from "./pages/cart/cart";
 import {Orders} from "./pages/orders/orders";
 import { MyProducts } from "./pages/myProducts/myProducts";
 import { ShopContextProvider } from "./context/shop-context";
+import { AuthProvider } from "./context/auth-context";
+import AuthCallback from "./pages/auth/authCallback";
 
 
 function App() {
@@ -14,18 +16,20 @@ function App() {
   return(
 
     <div className="App"> 
-      <ShopContextProvider>
-        <Router> 
-          <Navbar />
-          <Routes>
-            <Route path ="/" element={<MainShop/>}/>
-            <Route path ="/products" element={<Shop/>}/>
-            <Route path ="/myProducts" element={<MyProducts/>}/>
-            <Route path ="/orders" element={<Orders/>}/>
-            <Route path ="/cart" element={<Cart/>}/>
-          </Routes>
-        </Router>
-      </ShopContextProvider>
+        <AuthProvider>
+          <ShopContextProvider>
+            <Router> 
+              <Navbar />
+              <Routes>
+                <Route path ="/" element={<AuthCallback />}/>
+                <Route path ="/products" element={<Shop/>}/>
+                <Route path ="/myProducts" element={<MyProducts/>}/>
+                <Route path ="/orders" element={<Orders/>}/>
+                <Route path ="/cart" element={<Cart/>}/>
+              </Routes>
+            </Router>
+          </ShopContextProvider>
+        </AuthProvider>
     </div>
      
     

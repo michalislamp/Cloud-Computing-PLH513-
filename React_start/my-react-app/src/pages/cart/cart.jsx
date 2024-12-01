@@ -6,7 +6,7 @@ import "./cart.css";
 import axios from 'axios';
 import { eraseCookie } from "../../context/cookieHelpers";
 
-
+import { AuthContext } from "../../context/auth-context";
 
 
 
@@ -21,6 +21,8 @@ export const Cart = () => {
     const { totalPrice } = useContext(ShopContext);  //new
 
     const navigate = useNavigate(); // Initialize navigate
+
+    const { authState, logout } = useContext(AuthContext);
 
     const handleCheckout = async () => {
         const checkoutPromises = [];
@@ -37,6 +39,11 @@ export const Cart = () => {
         //         return;
         //     }
         // }
+        if(!authState.isLoggedIn){
+            window.location.href = "http://localhost:8182/realms/eshop/protocol/openid-connect/auth?response_type=code&client_id=frontend-client&redirect_uri=http://127.0.0.1:5173";
+            return;
+        }
+
         if(isCheckoutDisabled){
                 alert("Could not checkout.");
                 return;
@@ -51,6 +58,10 @@ export const Cart = () => {
     
             // Process each item in the cart
             for (const itemId in cartItems) {
+                if(cartItems[itemId]===0){
+                    alert("Could not checkout.");
+                    return;                
+                }
                 if (cartItems[itemId] > 0) {
                     const product = productLookup[itemId];
     

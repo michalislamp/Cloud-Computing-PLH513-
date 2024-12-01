@@ -3,6 +3,7 @@ import "./shop.css";
 import {Product} from "./product";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 
 export const Shop = () => {
@@ -10,7 +11,12 @@ export const Shop = () => {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');  // State for the search input
 
+    const navigate = useNavigate();
     useEffect(() => {
+        const role = localStorage.getItem("user_role");
+        if (role === "seller") {
+          navigate("/"); // Redirect to homepage if user is a sller.
+        }
         axios.get('http://localhost:8080/products')
             .then(response => {
                 setProducts(response.data);

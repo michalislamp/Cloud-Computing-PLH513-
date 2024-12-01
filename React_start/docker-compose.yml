@@ -3,6 +3,81 @@
 version: '3.8'
 
 services:
+
+  mysql-kc:
+    container_name: mysql-kc
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    environment:
+      # The user, password and database that Keycloak
+      # is going to create and use
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: keycloak
+      MYSQL_DATABASE: keycloak
+      # Self-Explanatory
+      MYSQL_ROOT_PASSWORD: admin
+    volumes:
+      - ./data2/mysql-keycloak:/var/lib/mysql
+      - ./keycloak.sql:/docker-entrypoint-initdb.d/init.sql # Mount the SQL file
+    networks:
+      - keycloak-and-mysql-network
+  keycloak-w:
+    image: quay.io/keycloak/keycloak:26.0.5
+    ports:
+      - 8182:8182
+    restart: unless-stopped
+    command: start-dev --http-port=8182
+    environment:
+      # User and password for the Administration Console
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT: false
+      # KC_PROXY: edge
+      KC_DB: mysql
+      KC_DB_URL_HOST: mysql-kc
+      KC_DB_URL_PORT: 3306
+      # Same values as the mysql-kc service
+      KC_DB_SCHEMA: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_DB_URL_DATABASE: keycloak
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "exec 3<>/dev/tcp/localhost/8180 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 20
+
+    depends_on:
+      - mysql-kc
+    volumes:
+      - keycloak-realm-data:/opt/jboss/keycloak/standalone/data
+    networks:
+      - keycloak-and-mysql-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: mysql-kc
+      MYSQL_ROOT_PASSWORD: admin
+    depends_on:
+      - mysql-kc
+    networks:
+      - keycloak-and-mysql-network  
+  
   mongodb:
     image: mongodb/mongodb-community-server:latest
     container_name: mongodb
@@ -75,7 +150,10 @@ services:
 networks:
   pro_backend_network:
     driver: bridge
+  keycloak-and-mysql-network:  
 
 volumes:
   mongodb_data:
   ordersdb_data:
+  mysql-keycloak:
+  keycloak-realm-data:

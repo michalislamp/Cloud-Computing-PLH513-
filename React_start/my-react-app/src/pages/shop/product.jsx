@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import { ShopContext } from "../../context/shop-context";
 
 
+
 export const Product = (props) => {
 
     const {_id, productName, priceTag, imageFile, quantity} = props.data   //changed id
@@ -10,8 +11,6 @@ export const Product = (props) => {
     const{ addToCart, cartItems } = useContext(ShopContext);
     // const cartItemAmmount = cartItems[id];
     const cartItemAmount = (cartItems[productId] || 0); // Default to 0 if the item isn't in the cart yet
-    
-
 
     return( 
         <div className="product"> 

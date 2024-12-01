@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './orders.css';
+import { useNavigate } from "react-router-dom";
+
 
 export const Orders = () => {
     const [orders, setOrders] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
+
+        const role = localStorage.getItem("user_role");
+        if (role !== "customer") {
+          navigate("/"); // Redirect to homepage if user is a sller.
+        }
+
         axios.get('http://localhost:8081/orders')
             .then(response => {
                 setOrders(response.data);

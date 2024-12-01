@@ -8,8 +8,8 @@ from werkzeug.utils import secure_filename
 # NA KANO PERISSOTEROUS LEEGXOUS STO BACK KAI NA KSERO
 # px na do pos ginetai na min parageilo ena proion to opooio einai out of stock
 # mporoun ta api na epikoinonoun metaksi tous px sto post tou arters na kano ena get sto db tou products kai na do an to proion einai out of stock 
+# 
 
-# genikotero check sta API
 
 import os
 
@@ -21,7 +21,7 @@ import os
 app = Flask(__name__)
 
 # Enable CORS for the whole app or specific routes
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})
 
 # MongoDB connection setup
 client = MongoClient("mongodb://mongodb:27017/") # FOR DOCKER
@@ -30,8 +30,8 @@ db = client['myDatabase']
 products_collection = db['products'] 
 
 # Configure the upload folder and allowed extensions
-# UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
-UPLOAD_FOLDER = '/static/uploads'
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
+# UPLOAD_FOLDER = '/static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -65,6 +65,10 @@ def get_product():
         elif "productName" in data:
             found_products = list(products_collection.find({"productName": data.get("productName")}))
             return dumps(found_products), 200
+        
+        elif "seller" in data:
+            found_products = list(products_collection.find({"seller": data.get("seller")}))
+            return dumps(found_products), 200
 
         else:
             found_products = list(products_collection.find())
@@ -88,7 +92,8 @@ def save_product():
             "productName": request.form.get('productName'),
             "priceTag": float(request.form.get('priceTag')),
             "quantity": int(request.form.get('quantity')),
-            "imageFile": f"http://localhost:8080/static/uploads/{filename}"  # Corrected URL path
+            "imageFile": f"http://localhost:8080/static/uploads/{filename}",  # Corrected URL path
+            "seller": request.form.get('seller')
         }
         products_collection.insert_one(product_data)
         return {"message": "Product saved successfully!", "filePath": f"{request.host_url}static/uploads/{filename}"}, 201
