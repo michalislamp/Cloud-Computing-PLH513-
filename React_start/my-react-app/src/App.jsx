@@ -8,7 +8,7 @@ import {Orders} from "./pages/orders/orders";
 import { MyProducts } from "./pages/myProducts/myProducts";
 import { ShopContextProvider } from "./context/shop-context";
 import { AuthProvider } from "./context/auth-context";
-import AuthCallback from "./pages/auth/authCallback";
+// import AuthCallback from "./pages/auth/authCallback";
 
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
             <Router> 
               <Navbar />
               <Routes>
-                <Route path ="/" element={<AuthCallback />}/>
+                <Route path ="/" element={<MainShop />}/>
                 <Route path ="/products" element={<Shop/>}/>
                 <Route path ="/myProducts" element={<MyProducts/>}/>
                 <Route path ="/orders" element={<Orders/>}/>

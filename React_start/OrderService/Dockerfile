@@ -11,6 +11,8 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+# Apache Kafka Service
+RUN pip install confluent-kafka
 
 # Make port 8081 available to the world outside this container
 EXPOSE 8081

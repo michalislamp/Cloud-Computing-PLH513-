@@ -1,6 +1,7 @@
-import {createContext, useEffect, useState } from 'react'
+import {createContext, useEffect, useState, useContext } from 'react'
 import axios from 'axios';
 import { getCookie, setCookie } from './cookieHelpers';
+import { AuthContext } from './auth-context';
 
 
 export const ShopContext = createContext(null);
@@ -14,6 +15,8 @@ const getDefaultCart = () => {          //i changed this function, to remember
 
 export const ShopContextProvider = (props) => {
 //////
+
+    const { authState } = useContext(AuthContext);
 
     const saveCartToCookies = (cart) => {
         setCookie('cartItems', JSON.stringify(cart), 7); // Save cart in cookies
@@ -76,6 +79,11 @@ export const ShopContextProvider = (props) => {
     //     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
     // }
     const addToCart = (itemId) => {
+
+        if(!authState.isLoggedIn){
+            alert("Please login to add item to Cart.");
+            return;
+        }
         
         setCartItems((prev) => {
             const updatedCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };

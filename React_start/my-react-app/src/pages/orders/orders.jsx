@@ -39,14 +39,14 @@ export const Orders = () => {
                         <h2>Order {index + 1}</h2>
                         <h3>Order ID: {order._id.$oid}</h3>
                         <p className="order-status">Status: {order.status}</p>
-                        <p className="order-total">Total Price: {order.total_price}€</p>
+                        <p className="order-total">Total Price: {order.total}€</p>
 
                         <h4>Products:</h4>
                         <ul>
-                            {order.products.map((product, productIndex) => (
+                            {order.items.map((product, productIndex) => (
                                 <li key={productIndex}>
-                                    <strong>Title:</strong> {product.title} <br />
-                                    <strong>Amount:</strong> {product.amount} <br />
+                                    <strong>Title:</strong> {product.productName} <br />
+                                    <strong>Amount:</strong> {product.quantity} <br />
                                     <strong>Product ID:</strong> {product.product_id}
                                 </li>
                             ))}

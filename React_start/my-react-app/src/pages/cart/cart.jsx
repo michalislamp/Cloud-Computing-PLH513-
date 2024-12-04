@@ -5,12 +5,12 @@ import {CartItem} from './cart-item';
 import "./cart.css";
 import axios from 'axios';
 import { eraseCookie } from "../../context/cookieHelpers";
-
 import { AuthContext } from "../../context/auth-context";
 
 
-
 export const Cart = () => {
+
+    const { authState } = useContext(AuthContext);
 
     const{ cartItems, setCartItems, getTotalCartAmount } = useContext(ShopContext);
     const totalAmount = getTotalCartAmount();
@@ -21,8 +21,6 @@ export const Cart = () => {
     const { totalPrice } = useContext(ShopContext);  //new
 
     const navigate = useNavigate(); // Initialize navigate
-
-    const { authState, logout } = useContext(AuthContext);
 
     const handleCheckout = async () => {
         const checkoutPromises = [];
@@ -39,10 +37,10 @@ export const Cart = () => {
         //         return;
         //     }
         // }
-        if(!authState.isLoggedIn){
-            window.location.href = "http://localhost:8182/realms/eshop/protocol/openid-connect/auth?response_type=code&client_id=frontend-client&redirect_uri=http://127.0.0.1:5173";
-            return;
-        }
+        // if(!authState.isLoggedIn){
+        //     alert("Please login to checkout.");
+        //     return;
+        // }
 
         if(isCheckoutDisabled){
                 alert("Could not checkout.");
@@ -66,25 +64,27 @@ export const Cart = () => {
                     const product = productLookup[itemId];
     
                     if (product) {
-                        const updatedQuantity = product.quantity - cartItems[itemId];
+                        // const updatedQuantity = product.quantity - cartItems[itemId];
+                        const updatedQuantity =1;
                         
                         if (updatedQuantity >= 0) {
                             // Save the product details to be sent with the order
                             orderProducts.push({
                                 title: product.productName,
                                 amount: cartItems[itemId],
-                                product_id: product._id.$oid
+                                product_id: product._id.$oid,
+                                price: product.priceTag
                             });
     
-                            // Add axios promise to array to update the product quantities
-                            const requestPromise = axios.put(`http://localhost:8080/products/${product._id.$oid}`, {
-                                quantity: updatedQuantity,
-                            }).catch(error => {
-                                console.error(`Error updating ${product.productName}:`, error);
-                                failedItems.push(product.productName);  // Track failures
-                            });
+                            // // Add axios promise to array to update the product quantities
+                            // const requestPromise = axios.put(`http://localhost:8080/products/${product._id.$oid}`, {
+                            //     quantity: updatedQuantity,
+                            // }).catch(error => {
+                            //     console.error(`Error updating ${product.productName}:`, error);
+                            //     failedItems.push(product.productName);  // Track failures
+                            // });
     
-                            checkoutPromises.push(requestPromise);
+                            // checkoutPromises.push(requestPromise);
                         } else {
                             console.warn(`Insufficient stock for ${product.productName}`);
                             failedItems.push(product.productName);  // Track insufficient stock
@@ -94,7 +94,7 @@ export const Cart = () => {
             }
     
             // Wait for all product update requests to complete
-            await Promise.all(checkoutPromises);
+            // await Promise.all(checkoutPromises);
     
             if (failedItems.length > 0) {
                 console.warn('Some items could not be checked out:', failedItems);
@@ -105,8 +105,9 @@ export const Cart = () => {
             // Prepare order object to be saved in the orders database
             const newOrder = {
                 products: orderProducts,       // Array of purchased products
-                total_price: totalAmount,      // Total price of the order
-                status: "Pending"              // Initial status as "Pending"
+                // total_price: totalAmount,      // Total price of the order
+                username: authState.preferredUsername
+                // status: "Pending"              // Initial status as "Pending"s
             };
             
             console.log('Order to be saved:', newOrder);
@@ -147,13 +148,14 @@ export const Cart = () => {
         // Check if cartItems is empty (no products added to the cart)
         const isCartEmpty = Object.keys(cartItems).length === 0;
         
-        const disableCheckout = products.some((product) => {
-            const productId = product._id.$oid;
-            const cartQuantity = cartItems[productId] || 0;
-            return cartQuantity > product.quantity; // If cart quantity exceeds stock quantity
-        });
+        // const disableCheckout = products.some((product) => {
+        //     const productId = product._id.$oid;
+        //     const cartQuantity = cartItems[productId] || 0;
+        //     return cartQuantity > product.quantity; // If cart quantity exceeds stock quantity
+        // });
 
-        setIsCheckoutDisabled(disableCheckout || isCartEmpty);  // Disable checkout if any item is invalid
+        // setIsCheckoutDisabled(disableCheckout || isCartEmpty);  // Disable checkout if any item is invalid
+        setIsCheckoutDisabled(isCartEmpty); 
     }, [cartItems, products]);  // Re-run the check when cartItems or products change
 
 

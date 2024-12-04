@@ -5,7 +5,7 @@ import "./navbar.css";
 import { AuthContext } from "../context/auth-context";
 
 export const Navbar = () => {
-  const { authState, logout } = useContext(AuthContext);
+  const { authState, logout, login } = useContext(AuthContext);
 
   return (
     <div className="navbar">
@@ -37,12 +37,9 @@ export const Navbar = () => {
           </>
         )}
         {!authState.isLoggedIn ? (
-          <a
-            href="http://localhost:8182/realms/eshop/protocol/openid-connect/auth?response_type=code&client_id=frontend-client&redirect_uri=http://127.0.0.1:5173"
-            className="login-button"
-          >
-            Login
-          </a>
+          <button onClick={login} className="logout-button">
+          Login
+          </button>
         ) : (
           <button onClick={logout} className="logout-button">
             Logout
