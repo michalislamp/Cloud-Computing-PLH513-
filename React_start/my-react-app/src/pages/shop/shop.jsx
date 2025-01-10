@@ -6,6 +6,18 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 
+axios.interceptors.request.use(
+    async (config) => {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+
 export const Shop = () => {
 
     const [products, setProducts] = useState([]);
@@ -17,7 +29,7 @@ export const Shop = () => {
         if (role === "seller") {
           navigate("/"); // Redirect to homepage if user is a sller.
         }
-        axios.get('http://localhost:8080/products')
+        axios.get('http://35.219.242.217:8080/products')
             .then(response => {
                 setProducts(response.data);
             })

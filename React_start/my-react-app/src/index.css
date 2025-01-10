@@ -31,10 +31,18 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;    /* Centers vertically */
+  min-width: 320px;       /* Ensures the body has a minimum width */
+  min-height: 100vh;      /* Ensures the body covers the full viewport height */
+}
+/* body {
+  margin: 0;
+  display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
+} */
 
 h1 {
   font-size: 3.2em;

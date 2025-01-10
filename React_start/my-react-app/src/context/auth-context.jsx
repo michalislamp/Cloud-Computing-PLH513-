@@ -34,11 +34,11 @@ export const AuthProvider = ({ children }) => {
 
   // }
   const login = () => {
-    const authUrl = "http://localhost:8182/realms/eshop/protocol/openid-connect/auth";
+    const authUrl = "http://35.219.242.217:8182/realms/eshop/protocol/openid-connect/auth";
     const params = new URLSearchParams({
       response_type: "code",
       client_id: "frontend-client",
-      redirect_uri: "http://127.0.0.1:5173",
+      redirect_uri: "http:35.219.242.217:5173",
     });
     window.location.href = `${authUrl}?${params.toString()}`;
   };
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    fetch("http://localhost:8182/realms/eshop/protocol/openid-connect/token", {
+    fetch("http://35.219.242.217:8182/realms/eshop/protocol/openid-connect/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
         grant_type: "authorization_code",
         client_id: "frontend-client",
         client_secret: "your-client-secret",
-        redirect_uri: "http://127.0.0.1:5173",
+        redirect_uri: "http://35.219.242.217:5173",
         code: code,
       }),
     })
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
 
 
   const logout = async () => {
-    const keycloakLogoutUrl = "http://localhost:8182/realms/eshop/protocol/openid-connect/logout";
+    const keycloakLogoutUrl = "http://35.219.242.217:8182/realms/eshop/protocol/openid-connect/logout";
     const clientId = "frontend-client";
     const refreshToken = localStorage.getItem("refresh_token");
   

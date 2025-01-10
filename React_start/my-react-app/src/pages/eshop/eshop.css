@@ -5,8 +5,11 @@
   justify-content: center;
   height: 100vh;
   text-align: center;
-  margin-left: 480px;
-  
+
+  /* Remove margin-left to ensure true centering */
+  margin: 0; 
+
+  /* Center the page */
   padding: 20px;
 }
 

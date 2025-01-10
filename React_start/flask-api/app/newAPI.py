@@ -9,26 +9,133 @@ import os
 import threading
 import json
 import logging
-# NA KANO PERISSOTEROUS LEEGXOUS STO BACK KAI NA KSERO
-# px na do pos ginetai na min parageilo ena proion to opooio einai out of stock
-# mporoun ta api na epikoinonoun metaksi tous px sto post tou arters na kano ena get sto db tou products kai na do an to proion einai out of stock 
-# 
-# docker compose down && docker image prune -f && docker compose up --build
 
+
+##### F.V. 1.0 #####
+
+import jwt # PyJWT
+from jwt import PyJWKClient, ExpiredSignatureError, InvalidTokenError
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+from functools import wraps
+
+# ------------------ CONFIGURATIONS ------------------
+# Keycloak Config
+KEYCLOAK_SERVER = "http://react_start-keycloak-w-1:8182"
+REALM_NAME = "eshop"
+KEYCLOAK_PUBLIC_KEY_URL = f"{KEYCLOAK_SERVER}/realms/{REALM_NAME}/protocol/openid-connect/certs"
+AUDIENCE = "account"
+#####           
 
 from confluent_kafka import Producer, KafkaException, KafkaError, Consumer
 from confluent_kafka.admin import AdminClient, NewTopic
 
-
+# docker compose down && docker image prune -f && docker compose up --build
 # docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:latest //Command for MongoDB creation
 # python -m venv myvenv // create py virtual environment
 # myvenv\Scripts\activate // activate virtual environment
+
 # py app\newAPI.py // run the app 
+
+
+###docker cleaup
+##ps aux | grep docker
+## find PIDS
+## kill -9 PID
+## docker-compose down
+#docker system prune -af
+#docker volume prune -f
+# sudo systemctl restart docker
+
+
+
+##### F.V. 1.0 #####
+# ---------------- TOKEN VALIDATION ----------------
+def validate_token(token):
+    """Validate a JWT token using Keycloak JWKS URL."""
+    try:
+        # Fetch the public key
+        print("Fetching signing key from JWKS URL...")
+        jwks_client = PyJWKClient(KEYCLOAK_PUBLIC_KEY_URL)
+        print("JWKS Client initialized successfully.")
+        
+        header = jwt.get_unverified_header(token)
+        print(f"JWT Header: {header}")
+
+        signing_key = jwks_client.get_signing_key_from_jwt(token).key
+        print(f"Signing Key: {signing_key}")
+
+        # Decode the token
+        decoded_token = jwt.decode(
+            token,
+            signing_key,
+            algorithms=["RS256"],
+            audience=AUDIENCE,
+            options={"verify_exp": True}  # Ensure expiration is verified
+        )
+        print(f"Decoded Token: {decoded_token}")  # Debugging output
+        return decoded_token
+    except ExpiredSignatureError:
+        print("Token has expired.")
+        return None
+    except InvalidTokenError as e:
+        print(f"Invalid token: {e}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return None
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth_header = request.headers.get("Authorization")
+        print(f"Authorization Header: {auth_header}")  # Debug
+        if not auth_header or not auth_header.startswith("Bearer "):
+            return jsonify({"message": "Token is missing or invalid"}), 401
+        token = auth_header.split(" ")[1]
+        print(f"Token: {token}")  # Debug
+        decoded_token = validate_token(token)
+        print(f"Decoded Token: {decoded_token}")  # Debug
+        if not decoded_token:
+            print("Token validation failed")  # Debug
+            return jsonify({"message": "Invalid or expired token"}), 401
+        request.user = decoded_token
+        return f(*args, **kwargs)
+    return decorated
+
+
+
+#####
 
 app = Flask(__name__)
 
-# Enable CORS for the whole app or specific routes
-CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})
+
+# Enable CORS for all routes and methods, including Authorization headers
+
+#for local
+
+# CORS(
+#     app,
+#     resources={r"/*": {"origins": ["http://127.0.0.1:5173", "http://localhost:5173"]}},
+#     supports_credentials=True,
+#     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+#     allow_headers=["Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"],
+#     expose_headers=["Authorization"]
+# )
+
+#### fro gcp
+CORS(
+    app,
+    resources={r"/*": {"origins": ["http://35.219.242.217:5173", "http://127.0.0.1:5173"]}},
+    supports_credentials=True,
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"],
+    expose_headers=["Authorization"]
+)
+
+
+
 
 # MongoDB connection setup
 client = MongoClient("mongodb://mongodb:27017/") # FOR DOCKER
@@ -188,7 +295,20 @@ def process_order(order_message):
 consumer_thread = threading.Thread(target=consume_messages, daemon=True)
 consumer_thread.start()
 
+#### f.v
+@app.before_request
+def handle_preflight():
+    # print("TTTEEEEEEST")
+    if request.method == "OPTIONS":
+        print("Handling preflight request")
+        response = app.response_class()
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, X-Requested-With, Accept, Origin"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response, 200
 
+######
 
 @app.route("/")
 def index():
@@ -255,6 +375,7 @@ def get_product():
         return str(e), 404
 
 @app.route("/products", methods=["POST"])
+@token_required
 def save_product():
     if 'imageFile' not in request.files:
         return {"message": "No file part"}, 400
@@ -270,7 +391,8 @@ def save_product():
             "productName": request.form.get('productName'),
             "priceTag": float(request.form.get('priceTag')),
             "quantity": int(request.form.get('quantity')),
-            "imageFile": f"http://localhost:8080/static/uploads/{filename}",  # Corrected URL path
+            "imageFile": f"http://35.219.242.217:8080/static/uploads/{filename}",  # FOR GCP 
+            # "imageFile": f"http://localhost:8080/static/uploads/{filename}",  # FOR LOCAL
             "seller": request.form.get('seller')
         }
         products_collection.insert_one(product_data)
@@ -281,6 +403,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 @app.route("/products", methods=["DELETE"])
+@token_required
 def delete_product():
     data = request.args
     product_id = data.get('_id')
@@ -299,6 +422,7 @@ def delete_product():
 
 
 @app.route("/products/<product_id>", methods=["PUT"])
+@token_required
 def update_product(product_id):
     try:
         updated_data = request.get_json()

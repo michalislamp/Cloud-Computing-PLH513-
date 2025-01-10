@@ -39,3 +39,39 @@
 .links a:hover {
   color: #bf00ff; /* Change this to your desired hover color */
 }
+
+.user-menu {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.username {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #333;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+.dropdown-menu .logout-button {
+  background: #ff4b4b;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dropdown-menu .logout-button:hover {
+  background: #ff3333;
+}

@@ -49,21 +49,20 @@ export const CartItem = (props) => {
     };
 
     return (
-        <div className="cartItem">
+        <div className="cart-item">
             <img src={imageFile}/>
-            <div className="description">
+            <div className="cart-item-details">
                 <p>
                     <b>{productName}</b>
                 </p>
                 <p>
                     {priceTag} €
                 </p>
-                <div className="countHandler">
+                <div className="cart-item-controls">
                     <button onClick={() => handleRemoveFromCart()}> - </button>
                     <input value={cartItems[productId] || 0} onChange={ (e) => handleQuantityChange(e) } />
                     <button onClick={() => handleAddToCart()}> + </button>
                 </div>
-                {error && <p className="error">Out of stock</p>}  {/* Show error if stock exceeded */}
             </div>
         </div>
     )

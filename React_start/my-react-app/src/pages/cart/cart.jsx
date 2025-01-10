@@ -7,6 +7,17 @@ import axios from 'axios';
 import { eraseCookie } from "../../context/cookieHelpers";
 import { AuthContext } from "../../context/auth-context";
 
+axios.interceptors.request.use(
+    async (config) => {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 
 export const Cart = () => {
 
@@ -113,7 +124,7 @@ export const Cart = () => {
             console.log('Order to be saved:', newOrder);
 
             // Send the order to the orders database
-            await axios.post('http://localhost:8081/orders', newOrder)
+            await axios.post('http://35.219.242.217:8081/orders', newOrder)
                 .then((response) => {
                     console.log('Order saved successfully:', response.data);
                     alert('Checkout complete! Your order has been placed.');
@@ -134,7 +145,7 @@ export const Cart = () => {
     
 
     useEffect(() => {
-        axios.get('http://localhost:8080/products')
+        axios.get('http://35.219.242.217:8080/products')
             .then(response => {
                 setProducts(response.data);
             })
@@ -160,28 +171,30 @@ export const Cart = () => {
 
 
     return (
-    <div className="cart">
-        <div><h1> Your Cart Items </h1></div>
-    
+    <div className="wrapper">
         <div className="cart">
-        {/* Only show products that are in the cart (i.e., cartItems[productId] > 0)  */}
-        {products
-            .filter((product) => cartItems[product._id.$oid] > 0) // Filter out products with a quantity of 0
-            .map((product) => {
-                const productId = product._id.$oid;
-                // console.log(cartItems[productId]);
-                return <CartItem key={productId} data={product} />;
-                
-            })}
-        </div>
-
-        <div className="checkout">
-            <p> Total: {totalAmount}€ </p>
-            <button onClick={() =>  {console.log("Navigating to /products"); navigate('/products');}}>Continue Shopping</button>
-            <button onClick={() => handleCheckout()} > Checkout </button>
-            {/* {isCheckoutDisabled && <p className="erroCheckout">Could Not Checkout</p>}   */}
-        </div>
+            <div><h1> Your Cart Items </h1></div>
         
+            <div className="cart">
+            {/* Only show products that are in the cart (i.e., cartItems[productId] > 0)  */}
+            {products
+                .filter((product) => cartItems[product._id.$oid] > 0) // Filter out products with a quantity of 0
+                .map((product) => {
+                    const productId = product._id.$oid;
+                    // console.log(cartItems[productId]);
+                    return <CartItem key={productId} data={product} />;
+                    
+                })}
+            </div>
+
+            <div className="checkout">
+                <p> Total: {totalAmount}€ </p>
+                <button onClick={() =>  {console.log("Navigating to /products"); navigate('/products');}}>Continue Shopping</button>
+                <button onClick={() => handleCheckout()} > Checkout </button>
+                {/* {isCheckoutDisabled && <p className="erroCheckout">Could Not Checkout</p>}   */}
+            </div>
+            
+        </div>
     </div>
     );
 };

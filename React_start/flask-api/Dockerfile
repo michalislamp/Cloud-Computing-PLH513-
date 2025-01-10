@@ -14,6 +14,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Apache Kafka Service
 RUN pip install confluent-kafka
 
+#### F.V 
+# Aythorization Service
+RUN pip install PyJWT cryptography
+#####
+
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 

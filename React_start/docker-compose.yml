@@ -90,7 +90,8 @@ services:
       # User and password for the Administration Console
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: localhost # FOR LOCAL
+      # KC_HOSTNAME: 35.219.242.217 #for GCP 
       KC_HOSTNAME_STRICT_HTTPS: false
       KC_HTTP_ENABLED: true
       KC_HOSTNAME_STRICT: false
@@ -121,6 +122,7 @@ services:
       - keycloak-realm-data:/opt/jboss/keycloak/standalone/data
     networks:
       - keycloak-and-mysql-network
+      - pro_backend_network            #####ADED THIS LINE
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -202,8 +204,10 @@ services:
       context: ./my-react-app
     container_name: frontend_c
     environment:
-      REACT_APP_API_URL_MAIN: http://localhost:8080
-      REACT_APP_API_URL_ORDER: http://localhost:8081
+      # REACT_APP_API_URL_MAIN: http://localhost:8080
+      # REACT_APP_API_URL_ORDER: http://localhost:8081
+      REACT_APP_API_URL_MAIN: http://35.219.242.217:8080
+      REACT_APP_API_URL_ORDER: http://35.219.242.217:8081
     ports:
       - "5173:5173"
     networks:

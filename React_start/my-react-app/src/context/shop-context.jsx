@@ -3,6 +3,25 @@ import axios from 'axios';
 import { getCookie, setCookie } from './cookieHelpers';
 import { AuthContext } from './auth-context';
 
+axios.interceptors.request.use(
+
+    async (config) => {
+        let token = localStorage.getItem("access_token");
+        console.log("Token from localStorage:", token);
+        if (!token) {
+            console.warn("No token found. You may need to log in.");
+            return config;
+    }
+        // Set the Authorization header
+        config.headers["Authorization"] = `Bearer ${token}`;
+        console.log("Request Headers with Authorization:", config.headers); // Debug log
+        return config;
+    },
+    (error) => {
+    return Promise.reject(error);
+}
+);
+
 
 export const ShopContext = createContext(null);
 
@@ -31,7 +50,7 @@ export const ShopContextProvider = (props) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/products')
+        axios.get('http://35.219.242.217:8080/products')
             .then(response => {
                 setProducts(response.data);
             })
@@ -112,7 +131,7 @@ export const ShopContextProvider = (props) => {
     const getReq = () => {
 
         useEffect(() => {
-            axios.get('http://localhost:8080/products')
+            axios.get('http://35.219.242.217:8080/products')
                 .then(response => {
                     setProducts(response.data);
                 })

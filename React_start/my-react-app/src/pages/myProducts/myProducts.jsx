@@ -3,6 +3,17 @@ import axios from 'axios';
 import "./myProducts.css";
 import { useNavigate } from "react-router-dom";
 
+axios.interceptors.request.use(
+    async (config) => {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 
 export const MyProducts = () => {
     const [productName, setProductName] = useState("");
@@ -34,7 +45,7 @@ export const MyProducts = () => {
         formData.append('seller', seller);
 
         // Send POST request with FormData
-        axios.post('http://localhost:8080/products', formData, {
+        axios.post('http://35.219.242.217:8080/products', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -54,7 +65,7 @@ export const MyProducts = () => {
     const fetchProducts = () => {
                 const seller = localStorage.getItem("preferred_username"); // Assuming the seller's username is stored in localStorage
                 console.log(seller);
-                axios.get('http://localhost:8080/products',{params: {seller: seller}})
+                axios.get('http://35.219.242.217:8080/products',{params: {seller: seller}})
                     .then((response) => {
                         setProducts(response.data);
                     })
@@ -72,7 +83,7 @@ export const MyProducts = () => {
     }, []);
 
     const handleUpdate = (productId, updatedField) => {
-        axios.put(`http://localhost:8080/products/${productId}`, updatedField)
+        axios.put(`http://35.219.242.217:8080/products/${productId}`, updatedField)
             .then((response) => {
                 fetchProducts();
             })
@@ -82,7 +93,7 @@ export const MyProducts = () => {
     };
 
     const handleDelete = (productId) => {
-        axios.delete(`http://localhost:8080/products?_id=${productId}`)
+        axios.delete(`http://35.219.242.217:8080/products?_id=${productId}`)
             .then((response) => {
                 fetchProducts();
             })

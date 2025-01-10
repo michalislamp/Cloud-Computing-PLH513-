@@ -26,10 +26,9 @@ export const Product = (props) => {
             {/* Disable the button if quantity is 0 */}
             <button
                 className="addToCartBttn"
-                onClick={() => quantity > 0 && addToCart(productId)}
-                disabled={quantity === 0}
+                onClick={() => addToCart(productId)}
             >
-                {quantity > 0 ? `Add To Cart ${cartItemAmount > 0 ? `(${cartItemAmount})` : ''}` : 'Out of stock'}
+                Add To Cart {cartItemAmount > 0 ? `(${cartItemAmount})` : ''}
             </button>
         </div>
     );
