@@ -24,7 +24,7 @@ e-Taverna is a fully functional e-commerce web application for an online tavern.
 ## Disclaimer
 
 
-To run the application locally ensure tha all Ips `35.219.242.217` is replaced with `localhost`.
+To run the application locally ensure tha all IPs `35.219.242.217` is replaced with `localhost`.
 Folders to check:
 - `my-react-app/src/`
 - `my-react-app/Dockerfile`
@@ -40,3 +40,5 @@ To start the application:
 ```bash
 docker-compose up
 ```
+
+Project's grade 10 / 10.
